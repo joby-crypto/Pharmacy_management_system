@@ -1,0 +1,8 @@
+<%
+    // Only a logged-in seller may see this page.
+    if (session.getAttribute("currentuser") == null
+            || !"seller".equals(session.getAttribute("usertype"))) {
+        response.sendRedirect("Login.html");
+        return;
+    }
+%>

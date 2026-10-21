@@ -1,0 +1,8 @@
+<%
+    // Only a logged-in customer may see this page.
+    if (session.getAttribute("currentuser") == null
+            || !"customer".equals(session.getAttribute("usertype"))) {
+        response.sendRedirect("Login.html");
+        return;
+    }
+%>

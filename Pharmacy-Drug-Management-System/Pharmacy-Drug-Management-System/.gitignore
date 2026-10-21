@@ -1,0 +1,23 @@
+# Build output
+target/
+build/
+dist/
+*.war
+*.class
+
+# IDE files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+nbproject/private/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local secrets / config
+.env
+*.local

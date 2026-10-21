@@ -1,0 +1,42 @@
+<%!
+    /*
+     * Shared helpers, included by every page that talks to the database.
+     *
+     * Connection settings are read from JVM system properties first, then from
+     * environment variables, so no credentials live in the source code:
+     *   DB_URL       (default jdbc:mysql://localhost:3306/drugdatabase)
+     *   DB_USER      (default root)
+     *   DB_PASSWORD  (default empty)
+     */
+    private static String setting(String key, String fallback) {
+        String v = System.getProperty(key);
+        if (v == null || v.isEmpty()) v = System.getenv(key);
+        return (v == null || v.isEmpty()) ? fallback : v;
+    }
+
+    private static java.sql.Connection getConnection() throws Exception {
+        Class.forName("com.mysql.jdbc.Driver");
+        return java.sql.DriverManager.getConnection(
+            setting("DB_URL", "jdbc:mysql://localhost:3306/drugdatabase"),
+            setting("DB_USER", "root"),
+            setting("DB_PASSWORD", ""));
+    }
+
+    /** HTML-escapes a value before it is written into a page (prevents XSS). */
+    private static String esc(String s) {
+        if (s == null) return "";
+        StringBuilder sb = new StringBuilder(s.length() + 16);
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '&':  sb.append("&amp;");  break;
+                case '<':  sb.append("&lt;");   break;
+                case '>':  sb.append("&gt;");   break;
+                case '"':  sb.append("&quot;"); break;
+                case '\'': sb.append("&#39;");  break;
+                default:   sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+%>
